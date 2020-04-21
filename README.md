@@ -76,7 +76,7 @@ you can simply use the built in models.
 
 ### Requirements
 
-- Laravel 4.* | 5.*
+- Laravel 4.* | 5.* | 6.*
 - Laravel's Auth, Sentry or Sentinel if you need automatic accountability
 - A `users` database table
 
