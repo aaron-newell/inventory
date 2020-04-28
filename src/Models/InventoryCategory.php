@@ -9,6 +9,9 @@ class InventoryCategory extends Node
 {
     use CategoryTrait;
 
+    protected $leftColumnName = 'lft';
+    protected $rightColumnName = 'rgt';
+
     protected $fillable = [
                 'name',
               ];
