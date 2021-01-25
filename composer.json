@@ -32,7 +32,7 @@
             "Trexology\\Inventory\\Tests\\": "tests/"
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "extra": {
       "laravel": {
         "providers": [
