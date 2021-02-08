@@ -23,7 +23,12 @@ class Inventory extends BaseModel
   							'description',
                 'category_id',
                 'metric_id',
-                'user_id'
+                'user_id',
+                'length',
+                'width',
+                'height',
+                'weight',
+                'image'
   						];
 
     /**

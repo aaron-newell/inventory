@@ -9,6 +9,7 @@ use Trexology\Inventory\Helper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Auth;
 
 trait InventoryTrait
 {
@@ -103,6 +104,7 @@ trait InventoryTrait
             ->getRelated()
             ->with('item')
             ->where('code', $sku)
+            ->where('user_id', Auth::user()->id)
             ->first();
 
         /*
@@ -660,6 +662,7 @@ trait InventoryTrait
 
             $sku->setAttribute('inventory_id', $inventoryId);
             $sku->setAttribute('code', $code);
+            $sku->setAttribute('user_id', Auth::user()->id);
 
             if ($sku->save()) {
                 $this->dbCommitTransaction();

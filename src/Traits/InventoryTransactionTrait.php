@@ -10,10 +10,14 @@ use Trexology\Inventory\InventoryServiceProvider;
 use Trexology\Inventory\Helper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Lang;
+use Trexology\Inventory\Models\Location; // added by aaron
+use Trexology\Inventory\Models\Inventory; // added by aaron
 
 trait InventoryTransactionTrait
 {
     use CommonMethodsTrait;
+    //use InventoryStockTrait; // added by aaron
+    
 
     /**
      * Stores the state before an update.
@@ -693,9 +697,20 @@ trait InventoryTransactionTrait
      */
     public function receivedPartial($quantity, $reason = '', $cost = 0)
     {
-        $current = $this->getAttribute('quantity');
+        $current = $this->getAttribute('quantity'); // expected value
 
         if ((float) $quantity === (float) $current || $quantity > $current) {
+            /*
+            $stock_id = $this->getAttribute('stock_id'); // get stock value to create inventory
+            
+            $item = Inventory::find($stock_id);
+            
+            $location = Location::find($item->location_id);
+            
+            $stock = $item->getStockFromLocation($location);
+            
+            return $stock->put(3, "forced put", 100);
+            */
             return $this->receivedAll($reason, $cost);
         }
 
