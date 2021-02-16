@@ -1,5 +1,5 @@
 {
-    "name": "trexology/inventory",
+    "name": "trexology/laravel-inventory",
     "description": "Inventory management using Laravel 4 / 5",
     "keywords": ["laravel", "inventory", "inventory-management"],
     "authors": [
