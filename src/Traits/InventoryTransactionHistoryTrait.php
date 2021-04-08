@@ -15,7 +15,7 @@ trait InventoryTransactionHistoryTrait
     public static function bootInventoryTransactionHistoryTrait()
     {
         static::creating(function (Model $model) {
-            $model->setAttribute('user_id', Helper::getCurrentUserId());
+            $model->setAttribute('user_id', $model->user_id);
         });
     }
 
