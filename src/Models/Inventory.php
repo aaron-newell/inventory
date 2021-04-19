@@ -29,6 +29,7 @@ class Inventory extends BaseModel
                 'width',
                 'height',
                 'weight',
+                'items_per_carton',
                 'image'
   						];
 
