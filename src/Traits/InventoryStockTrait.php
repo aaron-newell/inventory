@@ -85,7 +85,11 @@ trait InventoryStockTrait
     public static function bootInventoryStockTrait()
     {
         static::creating(function (Model $model) {
+<<<<<<< HEAD
             $model->setAttribute('user_id', Helper::getCurrentUserId());
+=======
+            $model->setAttribute('user_id', $model->user_id);
+>>>>>>> 8c735a7957f92f76b2dd38a5fda93d6bcb7b04b6
 
             // Check if a reason has been set, if not let's
             // retrieve the default first entry reason.

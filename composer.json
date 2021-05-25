@@ -1,6 +1,11 @@
 {
+<<<<<<< HEAD
     "name": "trexology/laravel-inventory",
     "description": "Inventory management using Laravel 4 / 5",
+=======
+    "name": "aaron-newell/inventory",
+    "description": "Inventory management using Laravel",
+>>>>>>> 8c735a7957f92f76b2dd38a5fda93d6bcb7b04b6
     "keywords": ["laravel", "inventory", "inventory-management"],
     "authors": [
         {
@@ -10,10 +15,15 @@
     ],
     "license": "MIT",
     "require": {
+<<<<<<< HEAD
         "php": ">=5.4.0",
         "illuminate/database": "5.*",
         "illuminate/support": "5.*",
         "baum/baum": "1.1.*"
+=======
+        "php": "^7.1.3",
+        "baum/baum": "2.x-dev"
+>>>>>>> 8c735a7957f92f76b2dd38a5fda93d6bcb7b04b6
     },
     "require-dev": {
         "orchestra/testbench": "3.1.*"
@@ -32,7 +42,10 @@
             "Trexology\\Inventory\\Tests\\": "tests/"
         }
     },
+<<<<<<< HEAD
     "minimum-stability": "stable",
+=======
+>>>>>>> 8c735a7957f92f76b2dd38a5fda93d6bcb7b04b6
     "extra": {
       "laravel": {
         "providers": [

@@ -76,7 +76,11 @@ you can simply use the built in models.
 
 ### Requirements
 
+<<<<<<< HEAD
 - Laravel 4.* | 5.*
+=======
+- Laravel 4.* | 5.* | 6.*
+>>>>>>> 8c735a7957f92f76b2dd38a5fda93d6bcb7b04b6
 - Laravel's Auth, Sentry or Sentinel if you need automatic accountability
 - A `users` database table
 

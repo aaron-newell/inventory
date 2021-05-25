@@ -24,10 +24,18 @@ class Inventory extends BaseModel
                 'category_id',
                 'metric_id',
                 'user_id',
+<<<<<<< HEAD
+=======
+                'value',
+>>>>>>> 8c735a7957f92f76b2dd38a5fda93d6bcb7b04b6
                 'length',
                 'width',
                 'height',
                 'weight',
+<<<<<<< HEAD
+=======
+                'items_per_carton',
+>>>>>>> 8c735a7957f92f76b2dd38a5fda93d6bcb7b04b6
                 'image'
   						];
 

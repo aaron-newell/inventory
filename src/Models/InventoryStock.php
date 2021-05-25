@@ -51,7 +51,11 @@ class InventoryStock extends BaseModel
      */
     public function location()
     {
+<<<<<<< HEAD
         return $this->hasOne(Location::class);
+=======
+        return $this->belongsTo(Location::class);
+>>>>>>> 8c735a7957f92f76b2dd38a5fda93d6bcb7b04b6
     }
 
     public function getWarehouse($stock_id)
