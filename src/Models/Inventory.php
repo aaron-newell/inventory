@@ -30,7 +30,8 @@ class Inventory extends BaseModel
                 'height',
                 'weight',
                 'items_per_carton',
-                'image'
+                'image',
+                'is_return'
   						];
 
     /**
