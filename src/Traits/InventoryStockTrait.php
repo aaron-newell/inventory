@@ -35,6 +35,7 @@ trait InventoryStockTrait
      */
     public $receiver_id = null;
     public $receiver_type = null;
+    public $batch_id = null;
 
     /**
      * Stores the quantity before an update.
@@ -128,7 +129,7 @@ trait InventoryStockTrait
      */
     public function postCreate()
     {
-        $this->generateStockMovement(0, $this->getAttribute('quantity'), $this->reason, $this->cost, $this->receiver_id, $this->receiver_type, $this->movementSerial);
+        $this->generateStockMovement(0, $this->getAttribute('quantity'), $this->reason, $this->cost, $this->receiver_id, $this->receiver_type, $this->movementSerial, $this->batch_id);
     }
 
     /**
@@ -138,7 +139,7 @@ trait InventoryStockTrait
      */
     public function postUpdate()
     {
-        $this->generateStockMovement($this->beforeQuantity, $this->getAttribute('quantity'), $this->reason, $this->cost, $this->receiver_id, $this->receiver_type, $this->movementSerial);
+        $this->generateStockMovement($this->beforeQuantity, $this->getAttribute('quantity'), $this->reason, $this->cost, $this->receiver_id, $this->receiver_type, $this->movementSerial, $this->batch_id);
     }
 
     /**
@@ -682,13 +683,14 @@ trait InventoryStockTrait
      *
      * @return bool|Model
      */
-    protected function generateStockMovement($before, $after, $reason = '', $cost = 0, $receiver_id = null, $receiver_type = null, $serial = null)
+    protected function generateStockMovement($before, $after, $reason = '', $cost = 0, $receiver_id = null, $receiver_type = null, $serial = null, $batch_id = null)
     {
         $movement = $this->movements()->getRelated()->newInstance();
 
         $movement->setAttribute('stock_id', $this->getKey());
         $movement->setAttribute('before', $before);
         $movement->setAttribute('after', $after);
+        $movement->setAttribute('batch_id', $batch_id);
         if ($receiver_id && $receiver_type) {
           $movement->setAttribute('receiver_id', $receiver_id);
           $movement->setAttribute('receiver_type', $receiver_type);
