@@ -1287,6 +1287,8 @@ trait InventoryTransactionTrait
 
         $stock->hasEnoughStock($this->getAttribute('quantity'));
 
+        $stock->batch_id = $this->getAttribute('batch_id');
+
         $this->dbStartTransaction();
 
         try {
