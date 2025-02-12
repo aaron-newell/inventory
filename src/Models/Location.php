@@ -2,7 +2,7 @@
 
 namespace Trexology\Inventory\Models;
 
-class Location extends Node
+class Location extends BaseModel
 {
     /**
      * The scoped location attributes.

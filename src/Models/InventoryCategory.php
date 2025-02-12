@@ -4,7 +4,7 @@ namespace Trexology\Inventory\Models;
 
 use Trexology\Inventory\Traits\CategoryTrait;
 
-class InventoryCategory extends Node
+class InventoryCategory extends BaseModel
 {
     use CategoryTrait;
 
