@@ -3,14 +3,10 @@
 namespace Trexology\Inventory\Models;
 
 use Trexology\Inventory\Traits\CategoryTrait;
-use Baum\Node;
 
 class InventoryCategory extends Node
 {
     use CategoryTrait;
-
-    protected $leftColumnName = 'lft';
-    protected $rightColumnName = 'rgt';
 
     protected $fillable = [
                 'name',

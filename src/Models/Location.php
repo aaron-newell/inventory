@@ -2,8 +2,6 @@
 
 namespace Trexology\Inventory\Models;
 
-use Baum\Node;
-
 class Location extends Node
 {
     /**
