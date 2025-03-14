@@ -477,9 +477,12 @@ trait InventoryStockTrait
             && $this->isValidQuantity($taking_unit_quantity) && $this->hasEnoughUnitStock($taking_unit_quantity)) {
             $available = $this->getAttribute('quantity');
             $unit_available = $this->getAttribute('unit_quantity');
+            $ecommerce_available = $this->getAttribute('ecommerce_qty');
 
             $left = (float)$available - (float)$taking;
             $unit_left = (float)$unit_available - (float)$taking_unit_quantity;
+            $ecommerce_left = (float)$ecommerce_available - (float)$taking;
+
             /*
              * If the updated total and the beginning total are the same, we'll check if
              * duplicate movements are allowed. We'll return the current record if
@@ -493,6 +496,7 @@ trait InventoryStockTrait
             }
             $this->setAttribute('quantity', $left);
             $this->setAttribute('unit_quantity', $unit_left);
+            $this->setAttribute('ecommerce_qty', $ecommerce_left);
 
             if (is_string($serial)) {
                 $serial = preg_split("/\s*,\s*/", trim($serial), -1, PREG_SPLIT_NO_EMPTY);
