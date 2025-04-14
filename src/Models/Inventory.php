@@ -93,4 +93,25 @@ class Inventory extends BaseModel
     {
         return $this->belongsToMany($this, 'inventory_assemblies', 'inventory_id', 'part_id')->withPivot(['quantity'])->withTimestamps();
     }
+
+    /**
+     * this function will return all products of a kit
+     */
+    public function kitInventories()
+    {
+        return $this
+            ->belongsToMany(Inventory::class, 'kit_inventories','kit_inventory_id','inventory_id')
+            ->withPivot('quantity');
+    }
+
+    /**
+     * this function will return all kist of a product
+     */
+    public function kits()
+    {
+        return $this
+            ->belongsToMany(Inventory::class, 'kit_inventories','inventory_id','kit_inventory_id');
+
+
+    }
 }
