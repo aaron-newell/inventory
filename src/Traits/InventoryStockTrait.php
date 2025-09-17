@@ -495,6 +495,11 @@ trait InventoryStockTrait
             }
             $this->setAttribute('quantity', $left);
             $this->setAttribute('unit_quantity', $unit_left);
+            if (isset($request['orderType']) && $request['orderType'] == 'unit') {
+                $ecommerce_available = $this->getAttribute('ecommerce_qty');
+                $ecommerce_left = (float)$ecommerce_available - (float)$taking;
+                $this->setAttribute('ecommerce_qty', $ecommerce_left);
+            }
 
             if (is_string($serial)) {
                 $serial = preg_split("/\s*,\s*/", trim($serial), -1, PREG_SPLIT_NO_EMPTY);
