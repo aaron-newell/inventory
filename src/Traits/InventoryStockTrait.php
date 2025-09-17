@@ -475,7 +475,6 @@ trait InventoryStockTrait
     {
         if ($this->isValidQuantity($taking) && $this->hasEnoughStock($taking)
             && $this->isValidQuantity($taking_unit_quantity) && $this->hasEnoughUnitStock($taking_unit_quantity)) {
-            $request = app('request')->all();
             $available = $this->getAttribute('quantity');
             $unit_available = $this->getAttribute('unit_quantity');
 
