@@ -131,7 +131,7 @@ trait InventoryStockTrait
      */
     public function postCreate()
     {
-        $this->generateStockMovement(0, $this->getAttribute('quantity'), $this->reason, $this->cost, $this->receiver_id, $this->receiver_type, $this->movementSerial, $this->batch_id, 0, $this->getAttribute('unit_quantity'),$this->getAttribute('group_no'));
+        $this->generateStockMovement(0, $this->getAttribute('quantity'), $this->reason, $this->cost, $this->receiver_id, $this->receiver_type, $this->movementSerial, $this->batch_id, 0, $this->getAttribute('unit_quantity'), $this->getAttribute('group_no'));
     }
 
     /**
@@ -141,7 +141,7 @@ trait InventoryStockTrait
      */
     public function postUpdate()
     {
-        $this->generateStockMovement($this->beforeQuantity, $this->getAttribute('quantity'), $this->reason, $this->cost, $this->receiver_id, $this->receiver_type, $this->movementSerial, $this->batch_id, $this->unitBeforeQuantity, $this->getAttribute('unit_quantity'),$this->getAttribute('group_no'));
+        $this->generateStockMovement($this->beforeQuantity, $this->getAttribute('quantity'), $this->reason, $this->cost, $this->receiver_id, $this->receiver_type, $this->movementSerial, $this->batch_id, $this->unitBeforeQuantity, $this->getAttribute('unit_quantity'), $this->getAttribute('group_no'));
     }
 
     /**
@@ -480,7 +480,7 @@ trait InventoryStockTrait
             $unit_available = $this->getAttribute('unit_quantity');
 
             $left = (float)$available - (float)$taking;
-            $reserved=(float)$reserved_quantity + (float)$taking;
+            $reserved = (float)$reserved_quantity + (float)$taking;
             $unit_left = (float)$unit_available - (float)$taking_unit_quantity;
 
             /*
@@ -712,7 +712,7 @@ trait InventoryStockTrait
      *
      * @return bool|Model
      */
-    protected function generateStockMovement($before, $after, $reason = '', $cost = 0, $receiver_id = null, $receiver_type = null, $serial = null, $batch_id = null, $unit_before = 0, $unit_after = 0,int $group_no)
+    protected function generateStockMovement($before, $after, $reason = '', $cost = 0, $receiver_id = null, $receiver_type = null, $serial = null, $batch_id = null, $unit_before = 0, $unit_after = 0, int|null $group_no = null)
     {
         $movement = $this->movements()->getRelated()->newInstance();
 
