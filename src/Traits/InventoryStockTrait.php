@@ -481,6 +481,7 @@ trait InventoryStockTrait
 
             $left = (float)$available - (float)$taking;
             $reserved = (float)$reserved_quantity + (float)$taking;
+            $onHand = $left + $reserved;
             $unit_left = (float)$unit_available - (float)$taking_unit_quantity;
 
             /*
@@ -497,6 +498,7 @@ trait InventoryStockTrait
             $this->setAttribute('quantity', $left);
             $this->setAttribute('unit_quantity', $unit_left);
             $this->setAttribute('reserved_quantity', $reserved);
+            $this->setAttribute('on_hand', $onHand);
 
             if (is_string($serial)) {
                 $serial = preg_split("/\s*,\s*/", trim($serial), -1, PREG_SPLIT_NO_EMPTY);
