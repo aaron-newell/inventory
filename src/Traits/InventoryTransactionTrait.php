@@ -555,6 +555,7 @@ trait InventoryTransactionTrait
         $this->validatePreviousState([
             null,
             $this::STATE_OPENED,
+            $this::STATE_COMMERCE_RESERVED,
         ], $this::STATE_COMMERCE_BACK_ORDERED);
 
         $this->setAttribute('state', $this::STATE_COMMERCE_BACK_ORDERED);
