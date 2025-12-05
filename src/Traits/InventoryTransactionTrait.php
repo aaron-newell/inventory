@@ -523,6 +523,9 @@ trait InventoryTransactionTrait
         }
 
         try {
+            if ($backOrder) {
+                return $this->backOrder($quantity, $unit_quantity);
+            }
             return $this->processStockTakeAndSave($quantity, 'inventory.transaction.reserved', $reason, $cost, $unit_quantity);
         } catch (NotEnoughStockException $e) {
             /*
