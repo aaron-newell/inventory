@@ -10,9 +10,9 @@ class InventoryStock extends BaseModel
 {
     use InventoryStockTrait;
 
-    protected $casts = [
-        'serial' => 'array',
-    ];
+//    protected $casts = [
+//        'serial' => 'array',
+//    ];
 
     /**
      * The belongsTo inventory item relationship.
