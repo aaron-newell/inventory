@@ -463,6 +463,8 @@ trait InventoryTrait
         $querry = $this->stocks()->where('location_id', $location->getKey());
         if ($group_no) {
             $querry->where('group_no', $group_no);
+        } else {
+            $querry->whereNull('group_no');
         }
         $stock = $querry->first();
 
