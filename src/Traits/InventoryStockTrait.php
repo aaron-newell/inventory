@@ -131,7 +131,7 @@ trait InventoryStockTrait
      */
     public function postCreate()
     {
-        $this->generateStockMovement(0, $this->getAttribute('quantity'), $this->reason, $this->cost, $this->receiver_id, $this->receiver_type, $this->movementSerial, $this->batch_id, 0, $this->getAttribute('unit_quantity'));
+        $this->generateStockMovement(0, $this->getAttribute('quantity'), $this->reason, $this->cost, $this->receiver_id, $this->receiver_type, $this->movementSerial, $this->batch_id, 0, $this->getAttribute('unit_quantity'), $this->getAttribute('group_no'));
     }
 
     /**
@@ -141,7 +141,7 @@ trait InventoryStockTrait
      */
     public function postUpdate()
     {
-        $this->generateStockMovement($this->beforeQuantity, $this->getAttribute('quantity'), $this->reason, $this->cost, $this->receiver_id, $this->receiver_type, $this->movementSerial, $this->batch_id, $this->unitBeforeQuantity, $this->getAttribute('unit_quantity'));
+        $this->generateStockMovement($this->beforeQuantity, $this->getAttribute('quantity'), $this->reason, $this->cost, $this->receiver_id, $this->receiver_type, $this->movementSerial, $this->batch_id, $this->unitBeforeQuantity, $this->getAttribute('unit_quantity'), $this->getAttribute('group_no'));
     }
 
     /**
@@ -475,11 +475,13 @@ trait InventoryStockTrait
     {
         if ($this->isValidQuantity($taking) && $this->hasEnoughStock($taking)
             && $this->isValidQuantity($taking_unit_quantity) && $this->hasEnoughUnitStock($taking_unit_quantity)) {
-            $request = app('request')->all();
             $available = $this->getAttribute('quantity');
+            $reserved_quantity = $this->getAttribute('reserved_quantity');
             $unit_available = $this->getAttribute('unit_quantity');
 
             $left = (float)$available - (float)$taking;
+            $reserved = (float)$reserved_quantity + (float)$taking;
+            $onHand = $left + $reserved;
             $unit_left = (float)$unit_available - (float)$taking_unit_quantity;
 
             /*
@@ -495,11 +497,8 @@ trait InventoryStockTrait
             }
             $this->setAttribute('quantity', $left);
             $this->setAttribute('unit_quantity', $unit_left);
-            if (isset($request['orderType']) && $request['orderType'] == 'unit') {
-                $ecommerce_available = $this->getAttribute('ecommerce_qty');
-                $ecommerce_left = (float)$ecommerce_available - (float)$taking;
-                $this->setAttribute('ecommerce_qty', $ecommerce_left);
-            }
+            $this->setAttribute('reserved_quantity', $reserved);
+            $this->setAttribute('on_hand', $onHand);
 
             if (is_string($serial)) {
                 $serial = preg_split("/\s*,\s*/", trim($serial), -1, PREG_SPLIT_NO_EMPTY);
@@ -715,7 +714,7 @@ trait InventoryStockTrait
      *
      * @return bool|Model
      */
-    protected function generateStockMovement($before, $after, $reason = '', $cost = 0, $receiver_id = null, $receiver_type = null, $serial = null, $batch_id = null, $unit_before = 0, $unit_after = 0)
+    protected function generateStockMovement($before, $after, $reason = '', $cost = 0, $receiver_id = null, $receiver_type = null, $serial = null, $batch_id = null, $unit_before = 0, $unit_after = 0, int|null $group_no = null)
     {
         $movement = $this->movements()->getRelated()->newInstance();
 
@@ -725,6 +724,7 @@ trait InventoryStockTrait
         $movement->setAttribute('unit_before', $unit_before);
         $movement->setAttribute('unit_after', $unit_after);
         $movement->setAttribute('batch_id', $batch_id);
+        $movement->setAttribute('group_no', $group_no);
         if ($receiver_id && $receiver_type) {
             $movement->setAttribute('receiver_id', $receiver_id);
             $movement->setAttribute('receiver_type', $receiver_type);
@@ -739,6 +739,7 @@ trait InventoryStockTrait
 
         return false;
     }
+
 
     /**
      * Sets the cost attribute.

@@ -523,6 +523,9 @@ trait InventoryTransactionTrait
         }
 
         try {
+            if ($backOrder) {
+                return $this->backOrder($quantity, $unit_quantity);
+            }
             return $this->processStockTakeAndSave($quantity, 'inventory.transaction.reserved', $reason, $cost, $unit_quantity);
         } catch (NotEnoughStockException $e) {
             /*
@@ -555,6 +558,7 @@ trait InventoryTransactionTrait
         $this->validatePreviousState([
             null,
             $this::STATE_OPENED,
+            $this::STATE_COMMERCE_RESERVED,
         ], $this::STATE_COMMERCE_BACK_ORDERED);
 
         $this->setAttribute('state', $this::STATE_COMMERCE_BACK_ORDERED);

@@ -201,18 +201,18 @@ trait InventoryTrait
      * Creates a stock record to the current inventory item.
      *
      * @param int|float|string $quantity
-     * @param Model            $location
-     * @param string           $reason
+     * @param Model $location
+     * @param string $reason
      * @param int|float|string $cost
-     * @param string           $aisle
-     * @param string           $row
-     * @param string           $bin
+     * @param string $aisle
+     * @param string $row
+     * @param string $bin
      *
+     * @return Model
      * @throws StockAlreadyExistsException
      * @throws StockNotFoundException
      * @throws \Trexology\Inventory\Exceptions\NoUserLoggedInException
      *
-     * @return Model
      */
     public function createStockOnLocation($quantity, Model $location, $reason = '', $cost = 0, $serial = null, $aisle = null, $row = null, $bin = null)
     {
@@ -236,7 +236,7 @@ trait InventoryTrait
             $stock->setAttribute('row', $row);
             $stock->setAttribute('bin', $bin);
 
-            if($stock->save() && $quantity > 0) {
+            if ($stock->save() && $quantity > 0) {
                 return $stock->put($quantity, $reason, $cost, null, null, $serial);
             }
         }
@@ -250,17 +250,17 @@ trait InventoryTrait
      *
      * @param Model $location
      *
+     * @return \Illuminate\Database\Eloquent\Model
      * @throws StockAlreadyExistsException
      *
-     * @return \Illuminate\Database\Eloquent\Model
      */
-    public function newStockOnLocation(Model $location)
+    public function newStockOnLocation(Model $location, int $group_no = null)
     {
         try {
             /*
              * We want to make sure stock doesn't exist on the specified location already
              */
-            if ($this->getStockFromLocation($location)) {
+            if ($this->getStockFromLocation($location, $group_no)) {
                 $message = Lang::get('inventory::exceptions.StockAlreadyExistsException', [
                     'location' => $location->name,
                 ]);
@@ -274,6 +274,7 @@ trait InventoryTrait
             // Assign the known attributes so devs don't have to
             $stock->setAttribute('inventory_id', $this->getKey());
             $stock->setAttribute('location_id', $location->getKey());
+            $stock->setAttribute('group_no', $group_no);
 
             return $stock;
         }
@@ -283,12 +284,12 @@ trait InventoryTrait
      * Takes the specified amount ($quantity) of stock from specified stock location.
      *
      * @param int|float|string $quantity
-     * @param Model            $location
-     * @param string           $reason
-     *
-     * @throws StockNotFoundException
+     * @param Model $location
+     * @param string $reason
      *
      * @return array
+     * @throws StockNotFoundException
+     *
      */
     public function takeFromLocation($quantity, Model $location, $reason = '')
     {
@@ -305,12 +306,12 @@ trait InventoryTrait
      * Takes the specified amount ($quantity) of stock from the specified stock locations.
      *
      * @param int|float|string $quantity
-     * @param array            $locations
-     * @param string           $reason
-     *
-     * @throws StockNotFoundException
+     * @param array $locations
+     * @param string $reason
      *
      * @return array
+     * @throws StockNotFoundException
+     *
      */
     public function takeFromManyLocations($quantity, $locations = [], $reason = '')
     {
@@ -330,7 +331,7 @@ trait InventoryTrait
      *
      * @param int|float|string $quantity
      * @param $location
-     * @param string           $reason
+     * @param string $reason
      *
      * @return array
      */
@@ -343,8 +344,8 @@ trait InventoryTrait
      * Alias for the `takeFromMany` function.
      *
      * @param int|float|string $quantity
-     * @param array            $locations
-     * @param string           $reason
+     * @param array $locations
+     * @param string $reason
      *
      * @return array
      */
@@ -357,13 +358,13 @@ trait InventoryTrait
      * Puts the specified amount ($quantity) of stock into the specified stock location.
      *
      * @param int|float|string $quantity
-     * @param Model            $location
-     * @param string           $reason
+     * @param Model $location
+     * @param string $reason
      * @param int|float|string $cost
      *
+     * @return array
      * @throws StockNotFoundException
      *
-     * @return array
      */
     public function putToLocation($quantity, Model $location, $reason = '', $cost = 0)
     {
@@ -380,13 +381,13 @@ trait InventoryTrait
      * Puts the specified amount ($quantity) of stock into the specified stock locations.
      *
      * @param int|float|string $quantity
-     * @param array            $locations
-     * @param string           $reason
+     * @param array $locations
+     * @param string $reason
      * @param int|float|string $cost
      *
+     * @return array
      * @throws StockNotFoundException
      *
-     * @return array
      */
     public function putToManyLocations($quantity, $locations = [], $reason = '', $cost = 0)
     {
@@ -406,7 +407,7 @@ trait InventoryTrait
      *
      * @param int|float|string $quantity
      * @param $location
-     * @param string           $reason
+     * @param string $reason
      * @param int|float|string $cost
      *
      * @return array
@@ -420,8 +421,8 @@ trait InventoryTrait
      * Alias for the `putToMany` function.
      *
      * @param int|float|string $quantity
-     * @param array            $locations
-     * @param string           $reason
+     * @param array $locations
+     * @param string $reason
      * @param int|float|string $cost
      *
      * @return array
@@ -437,9 +438,9 @@ trait InventoryTrait
      * @param Model $fromLocation
      * @param Model $toLocation
      *
+     * @return mixed
      * @throws StockNotFoundException
      *
-     * @return mixed
      */
     public function moveStock(Model $fromLocation, Model $toLocation)
     {
@@ -453,13 +454,19 @@ trait InventoryTrait
      *
      * @param Model $location
      *
+     * @return mixed
      * @throws StockNotFoundException
      *
-     * @return mixed
      */
-    public function getStockFromLocation(Model $location)
+    public function getStockFromLocation(Model $location, $group_no = null)
     {
-        $stock = $this->stocks()->where('location_id', $location->getKey())->first();
+        $querry = $this->stocks()->where('location_id', $location->getKey());
+        if ($group_no) {
+            $querry->where('group_no', $group_no);
+        } else {
+            $querry->whereNull('group_no');
+        }
+        $stock = $querry->first();
 
         if ($stock) {
             return $stock;
@@ -542,7 +549,7 @@ trait InventoryTrait
             $code = str_pad($this->getKey(), $codeLength, '0', STR_PAD_LEFT);
 
             // Return and process the generation
-            return $this->processSkuGeneration($this->getKey(), $prefix.$skuSeparator.$code);
+            return $this->processSkuGeneration($this->getKey(), $prefix . $skuSeparator . $code);
         }
 
         // Always return false on generation failure
@@ -591,11 +598,11 @@ trait InventoryTrait
      * is thrown.
      *
      * @param string $code
-     * @param bool   $overwrite
-     *
-     * @throws SkuAlreadyExistsException
+     * @param bool $overwrite
      *
      * @return mixed|bool
+     * @throws SkuAlreadyExistsException
+     *
      */
     public function createSku($code, $overwrite = false)
     {
@@ -623,7 +630,7 @@ trait InventoryTrait
      * supplied with the specified code.
      *
      * @param string $code
-     * @param null   $sku
+     * @param null $sku
      *
      * @return mixed|bool
      */
@@ -649,7 +656,7 @@ trait InventoryTrait
      * Processes an SKU generation covered by database transactions.
      *
      * @param int|string $inventoryId
-     * @param string     $code
+     * @param string $code
      *
      * @return bool|mixed
      */
@@ -685,7 +692,7 @@ trait InventoryTrait
      * Processes updating the specified SKU
      * record with the specified code.
      *
-     * @param Model  $sku
+     * @param Model $sku
      * @param string $code
      *
      * @return mixed|bool
